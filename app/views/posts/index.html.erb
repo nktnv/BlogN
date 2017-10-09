@@ -1,0 +1,9 @@
+<h1>All posts</h1>
+<br>
+<div>
+  <% @posts.each do |post| %>
+    <h4><%= link_to post.title, post %></h4>
+    <div><%= post.summary %></div>
+    <br>
+  <% end %>
+</div>
