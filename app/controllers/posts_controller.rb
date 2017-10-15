@@ -1,6 +1,9 @@
 class PostsController < ApplicationController
 
-  before_action :find_post, only: [:show, :edit, :update, :destroy]
+  include ApplicationHelper
+
+  before_action :require_user, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
 
   def index
     @posts = Post.all
@@ -14,20 +17,25 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
-    @post.save ? redirect_to(@post) : render(:new)
+    @post = current_user.posts.create(post_params)
+    @post.save ? redirect_to(posts_path) : redirect_to(new)
   end
 
   def edit
+    redirect_non_owner_user(@post)
   end
 
   def update
-    @post.update_attributes(post_params) ? redirect_to(@post) : render(:new)
+    if user_owner_of?(@post)
+      @post.update_attributes(post_params) ? redirect_to(@post) : redirect_to(new)
+    end
   end
 
   def destroy
-    @post.destroy
-    redirect_to posts_path
+    if user_owner_of?(@post)
+      @post.destroy
+      redirect_to posts_path
+    end
   end
 
   private
@@ -36,7 +44,7 @@ class PostsController < ApplicationController
     params.require(:post).permit(:title, :summary, :body)
   end
 
-  def find_post
+  def set_post
     @post = Post.find(params[:id])
   end
 
