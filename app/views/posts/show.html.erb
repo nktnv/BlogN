@@ -1,18 +1,20 @@
-<span>Author: <strong> <%= "#{@post.user.first_name} #{@post.user.last_name}" %> </strong> <%= @post.created_at.strftime('%B %d, %Y, %l:%M%P') %> </span>
-<h4><%= @post.title %></h4>
-<div><%= @post.body %></div>
+<div id="current_post">
+  <span>Author: <strong> <%= "#{@post.user.first_name} #{@post.user.last_name}" %> </strong> <%= @post.created_at.strftime('%B %d, %Y, %l:%M%P') %> </span>
+  <h4><%= @post.title %></h4>
+  <div><%= @post.body %></div>
+  <br>
+  <div class="form-inline">
+    <% if user_owner_of?(@post) %>
+      <%= link_to 'Edit', edit_post_path(@post), class: 'btn btn-default' %>
+      <%= link_to 'Delete', @post, remote: true, method: :delete, class: 'btn btn-default', data: {confirm: 'Are you sure?'} %>
+    <% end %>
+    <%= render 'votes/votes', parent: @post, vote_type: 'like' %>
+    <%= render 'votes/votes', parent: @post, vote_type: 'dislike' %>
+  </div>
 
 <br>
-
-<% if user_owner_of?(@post) %>
-  <%= link_to 'Edit', edit_post_path(@post), class: 'btn btn-default' %>
-  <%= link_to 'Delete', post_path(@post), method: :delete, class: 'btn btn-default', data: {confirm: 'Are you sure?'} %>
-<% end %>
-
-<br>
-
 <% if current_user %>
-    <%= render 'comments/form', parent: @post %>
+  <%= render 'comments/form', parent: @post %>
 <% else %>
   <div class="well">
     <%= link_to 'Please log in to send a comment...', login_path %>
@@ -25,3 +27,4 @@
   <% unless @post.comments.size == 1 && current_user %> <h5>Comments</h5> <% end %>
   <%= render 'comments/comments', collection: @post.comments %>
 <% end %>
+</div>

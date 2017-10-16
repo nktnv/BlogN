@@ -1,5 +1,6 @@
 <%= simple_form_for([parent, parent.comments.build]) do |f| %>
   <% if parent.is_a?(Comment) %> <b> Reply to <%= parent.user.first_name %>: </b> <% end %>
   <%= f.input :body, placeholder: 'Leave a comment...', label: false %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
   <%= f.button :submit, value: 'Send comment' %>
 <% end %>

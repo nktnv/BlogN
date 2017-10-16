@@ -34,7 +34,10 @@ class PostsController < ApplicationController
   def destroy
     if user_owner_of?(@post)
       @post.destroy
-      redirect_to posts_path
+      respond_to do |format|
+        format.html { redirect_to posts_path }
+        format.js { render 'destroy' }
+      end
     end
   end
 
