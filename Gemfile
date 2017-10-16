@@ -10,6 +10,7 @@ gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 gem 'simple_form'
 gem 'bcrypt', '~> 3.1', '>= 3.1.11'
+gem 'jquery-rails'
 
 gem 'pg', '~> 0.21.0'
 

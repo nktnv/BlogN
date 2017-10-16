@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
   end
 
   def create
-    @comment = @parent.comments.create(comment_params.merge(user_id: current_user.id))
+    @comment = @parent.comments.create(comment_params)
     redirect_to @comment.post
   end
 
@@ -28,7 +28,10 @@ class CommentsController < ApplicationController
   def destroy
     if user_owner_of?(@comment)
       @comment.destroy
-      redirect_to_post
+      respond_to do |format|
+        format.html { redirect_to redirect_to_post }
+        format.js { render 'destroy' }
+      end
     end
   end
 
@@ -39,7 +42,7 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:body)
+    params.require(:comment).permit(:body, :user_id)
   end
 
   def set_parent
