@@ -8,7 +8,8 @@ Rails.application.routes.draw do
   end
 
   get 'signup' => 'users#new'
-  resources :users, only: [:new, :create]
+  resources :users
+  resources :images
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'

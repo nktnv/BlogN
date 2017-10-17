@@ -1,0 +1,12 @@
+<h3>My profile</h3>
+<div>
+  <p> First name: <%= @user.first_name %> </p>
+  <p> Last name: <%= @user.last_name %> </p>
+  <p> Email: <%= @user.email %> </p>
+</div>
+
+<% if @user.image %>
+    <%#= image_tag @user.image.picture %>
+<% else %>
+  <%= render '/images/image_form' %>
+<% end %>
