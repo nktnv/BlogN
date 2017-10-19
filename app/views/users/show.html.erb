@@ -1,0 +1,16 @@
+<div class="profile">
+  <h3>My profile</h3>
+  <div class="well">
+    <% if @user.image %>
+      <%= image_tag(public_images_path(@user.image), class: 'img-responsive') %>
+      <%= link_to 'Upload new image', @user.image, method: :delete, class: 'btn btn-default', data: {confirm: 'Current image will be deleted. Are you sure?'} %>
+    <% else %>
+      <%= render '/images/image_form' %>
+    <% end %>
+  </div>
+  <div class="well">
+    <p> First name: <%= @user.first_name %> </p>
+    <p> Last name: <%= @user.last_name %> </p>
+    <p> Email: <%= @user.email %> </p>
+  </div>
+</div>

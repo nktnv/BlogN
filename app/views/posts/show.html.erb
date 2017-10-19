@@ -1,9 +1,10 @@
 <div id="current_post">
-  <span>Author: <strong> <%= "#{@post.user.first_name} #{@post.user.last_name}" %> </strong> <%= @post.created_at.strftime('%B %d, %Y, %l:%M%P') %> </span>
-  <h4><%= @post.title %></h4>
-  <div><%= @post.body %></div>
-  <br>
-  <div class="form-inline">
+  <%= image_tag(public_images_path(@post.user.image), class: 'img-thumbnail comment-image') %>
+  <strong><%= "#{@post.user.first_name} #{@post.user.last_name}" %></strong>
+  <time><%= @post.created_at.strftime('%B %d, %Y, %l:%M%P') %></time>
+  <h3><%= @post.title %></h3>
+  <div class="post-body"><%= @post.body %></div>
+  <div class="form-inline init-comment">
     <% if user_owner_of?(@post) %>
       <%= link_to 'Edit', edit_post_path(@post), class: 'btn btn-default' %>
       <%= link_to 'Delete', @post, remote: true, method: :delete, class: 'btn btn-default', data: {confirm: 'Are you sure?'} %>
@@ -11,20 +12,15 @@
     <%= render 'votes/votes', parent: @post, vote_type: 'like' %>
     <%= render 'votes/votes', parent: @post, vote_type: 'dislike' %>
   </div>
-
-<br>
-<% if current_user %>
-  <%= render 'comments/form', parent: @post %>
-<% else %>
-  <div class="well">
-    <%= link_to 'Please log in to send a comment...', login_path %>
-  </div>
-<% end %>
-
-<br>
-
-<% if @post.comments.size > 0 %>
-  <% unless @post.comments.size == 1 && current_user %> <h5>Comments</h5> <% end %>
-  <%= render 'comments/comments', collection: @post.comments %>
-<% end %>
+  <% if current_user %>
+    <%= render 'comments/form', parent: @post %>
+  <% else %>
+    <div class="well">
+      <%= link_to 'Please log in to send a comment...', login_path %>
+    </div>
+  <% end %>
+  <% if @post.comments.size > 0 %>
+    <% unless @post.comments.size == 1 && current_user %> <h5>Comments</h5> <% end %>
+    <%= render 'comments/comments', collection: @post.comments %>
+  <% end %>
 </div>
