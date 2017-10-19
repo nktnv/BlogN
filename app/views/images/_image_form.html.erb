@@ -1,8 +1,5 @@
-<div class="well">
-  <%= simple_form_for(Image.new, url: {controller: :images, action: :create}, :html => { :multipart => true }) do |f| %>
-    <%= f.hidden_field :user_id, value: current_user.id %>
-    <%= f.input :name %>
-    <%= f.input :picture, as: :file %>
-    <%= f.button :submit, value: 'Upload image' %>
-  <% end %>
-</div>
+<%= simple_form_for(Image.new, url: {controller: :images, action: :create}, html: {multipart: true}) do |f| %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
+  <%= f.input :picture, label: 'Upload profile image', as: :file %>
+  <%= f.button :submit, value: 'Upload image' %>
+<% end %>

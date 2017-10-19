@@ -1,27 +1,36 @@
 class ImagesController < ApplicationController
 
+  include ImagesHelper
+  include ApplicationHelper
+
+  before_action :create_public_image_directory
+
   def create
-    @image = Image.create(image_params)
-    if params[:image].present?
-      file =  params[:image][:picture]
-      create_image_directory
-      File.open(Rails.root.join('public', 'images', file.original_filename), 'wb') do |f|
+    if params[:image][:picture]
+      file = params[:image][:picture]
+      file_extension = File.extname(file.original_filename)
+      file.original_filename = random_value + file_extension
+      File.open(absolute_public_image_path(file.original_filename), 'wb') do |f|
         f.write(file.read)
       end
-      @image.picture = '/public/images/' + file.original_filename
+      @image = Image.new(image_params.merge(picture: file.original_filename))
+      @image.save ? redirect_to(user_path(current_user.id)) : redirect_to(:root)
+    else
+      redirect_to(user_path(current_user.id))
     end
-    redirect_to user_path(current_user.id)
+  end
+
+  def destroy
+    @image = Image.find(params[:id])
+    @image.destroy
+    File.delete(absolute_public_image_path(@image.picture)) if
+    redirect_to(user_path(current_user.id))
   end
 
   private
 
   def image_params
-    params.require(:image).permit(:name, :picture, :user_id)
-  end
-
-  def create_image_directory
-    directory_name = File.join(File.dirname(__FILE__), '../../public/images')
-    Dir.mkdir(directory_name) unless File.exists?(directory_name)
+    params.require(:image).permit(:user_id, :picture)
   end
 
 end

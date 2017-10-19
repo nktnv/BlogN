@@ -1,13 +1,16 @@
 <% collection.each do |comment| %>
   <% break if comment.body.nil? && current_user %>
   <div id="comment_<%= comment.id %>" class="well">
+    <%= image_tag(public_images_path(comment.user.image), class: 'img-thumbnail comment-image') %>
     <span><strong><%= "#{comment.user.first_name} #{comment.user.last_name}" %></strong><time> <%= comment.created_at.strftime('%m-%d-%Y, at %l:%M%P') %> </time></span>
-    <p><%= comment.body %></p>
-    <%= link_to 'Edit', edit_comment_path(comment) if user_owner_of?(comment) %>
-    <%= link_to 'Reply', new_comment_comment_path(comment) if current_user %>
-    <%= link_to 'Delete comment', [comment.post, comment], remote: true, method: :delete if user_owner_of?(comment) %>
-    <%= render 'votes/votes', parent: comment, vote_type: 'like' %>
-    <%= render 'votes/votes', parent: comment, vote_type: 'dislike' %>
+    <div class="comment-message"><p><%= comment.body %></p></div>
+    <div class="comment-panel">
+      <%= link_to 'Edit', edit_comment_path(comment) if user_owner_of?(comment) %>
+      <%= link_to 'Reply', new_comment_comment_path(comment) if current_user %>
+      <%= link_to 'Delete comment', [comment.post, comment], remote: true, method: :delete if user_owner_of?(comment) %>
+      <%= render 'votes/votes', parent: comment, vote_type: 'like' %>
+      <%= render 'votes/votes', parent: comment, vote_type: 'dislike' %>
+    </div>
     <ul>
       <% unless comment.comments.empty? %>
         <%= render 'comments/comments', :collection => comment.comments %>
