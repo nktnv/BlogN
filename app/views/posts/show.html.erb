@@ -1,6 +1,6 @@
 <div id="current_post">
   <%= image_tag(public_images_path(@post.user.image), class: 'img-thumbnail comment-image') %>
-  <strong><%= "#{@post.user.first_name} #{@post.user.last_name}" %></strong>
+  <strong><%= current_user && current_user.id == @post.user.id ? 'Me:' : "#{@post.user.first_name} #{@post.user.last_name}" %></strong>
   <time><%= @post.created_at.strftime('%B %d, %Y, %l:%M%P') %></time>
   <h3><%= @post.title %></h3>
   <div class="post-body"><%= @post.body %></div>

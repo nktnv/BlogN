@@ -2,7 +2,7 @@ class PostsController < ApplicationController
 
   include ApplicationHelper
 
-  before_action :require_user, only: [:new, :create, :edit, :update, :destroy]
+  before_action :require_user, only: [:new, :create, :edit, :update, :destroy, :index_users_posts]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -51,6 +51,20 @@ class PostsController < ApplicationController
         format.js { render 'destroy' }
       end
     end
+  end
+
+  def index_users_posts
+    @posts = Post.where(user_id: current_user.id)
+  end
+
+  def popular_posts
+    posts_array_of_hashes =
+      Post.all.map do |post|
+        { post.id => post.votes.where(attitude: :like).size }
+      end
+    posts_hash = posts_array_of_hashes.reduce Hash.new, :merge
+    sorted_posts = posts_hash.sort_by { |k, v| -v }
+    @posts = sorted_posts[0..4].map { |el| Post.find(el[0]) }
   end
 
   private
