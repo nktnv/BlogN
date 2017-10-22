@@ -1,24 +1,14 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Ruby version: ruby 2.4.1p111
 
-Things you may want to cover:
+Preparing:
+- bundle isntall
+- rake db:migrate
 
-* Ruby version
+Starting:
+- DB - sudo service postgresql start
+- Server - rails s
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Tests running:
+- bundle exec rspec
