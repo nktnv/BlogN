@@ -14,9 +14,16 @@ class ImagesController < ApplicationController
         f.write(file.read)
       end
       @image = Image.new(image_params.merge(picture: file.original_filename))
-      @image.save ? redirect_to(user_path(current_user.id)) : redirect_to(:root)
+      if @image.save
+        redirect_to(user_path(current_user.id))
+        flash[:success] = 'Image was uploaded successfully.'
+      else
+        redirect_to(:root)
+        flash[:error] = 'Something went wrong.'
+      end
     else
       redirect_to(user_path(current_user.id))
+      flash[:error] = 'Please, choose an image.'
     end
   end
 

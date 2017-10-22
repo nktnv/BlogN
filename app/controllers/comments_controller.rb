@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
   include ApplicationHelper
 
   before_action :require_user
-  before_action :set_parent, only: [:new, :create]
+  before_action :set_parent, only: [:new, :create, :destroy]
   before_action :set_comment, only: [:edit, :update, :destroy]
 
   def new
@@ -12,7 +12,13 @@ class CommentsController < ApplicationController
 
   def create
     @comment = @parent.comments.create(comment_params)
-    redirect_to @comment.post
+    if @comment.save
+      redirect_to @comment.post
+      flash[:success] = 'Comment was added successfully.'
+    else
+      redirect_to parent(@parent)
+      flash[:error] = 'Comment cannot be empty.'
+    end
   end
 
   def edit
@@ -21,7 +27,13 @@ class CommentsController < ApplicationController
 
   def update
     if user_owner_of?(@comment)
-      @comment.update_attributes(comment_params) ? redirect_to(@comment.post) : redirect_to(new)
+      if @comment.update_attributes(comment_params)
+        redirect_to(@comment.post)
+        flash[:success] = 'Comment was updated successfully.'
+      else
+        redirect_to(@comment.post)
+        flash[:error] = 'Comment cannot be empty.'
+      end
     end
   end
 
@@ -29,7 +41,7 @@ class CommentsController < ApplicationController
     if user_owner_of?(@comment)
       @comment.destroy
       respond_to do |format|
-        format.html { redirect_to redirect_to_post }
+        format.html { redirect_to @parent }
         format.js { render 'destroy' }
       end
     end
@@ -53,6 +65,10 @@ class CommentsController < ApplicationController
 
   def set_comment
     @comment = Comment.find(params[:id])
+  end
+
+  def parent(obj)
+    obj.is_a?(Post) ? obj : obj.post
   end
 
 end

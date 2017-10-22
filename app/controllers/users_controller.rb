@@ -13,8 +13,10 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
+      flash[:success] = 'Welcome!'
       redirect_to '/'
     else
+      flash[:error] = 'All fields are mandatory.'
       redirect_to '/signup'
     end
   end

@@ -9,7 +9,8 @@ class SessionsController < ApplicationController
       session[:user_id] = @user.id
       redirect_to '/'
     else
-      render 'new'
+      redirect_to '/login'
+      flash[:error] = 'Password or email is wrong or doesn\'t exist.'
     end
   end
 
