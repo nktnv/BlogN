@@ -34,5 +34,12 @@ test:
   password: 123
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: utf8
+  database: d5gno8v0dghmmh
+  host: ec2-54-225-88-191.compute-1.amazonaws.com
+  pool: 5
+  port: 5432
+  timeout: 5000
+  username: qbbkxquymjoodr
+  password: f9fc67961dfc6957e49c2389e7220a5ed43cd0eda294f1c72e2e83885425d5d4
