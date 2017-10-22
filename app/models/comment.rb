@@ -5,6 +5,8 @@ class Comment < ApplicationRecord
   has_many :votes, as: :voteable, dependent: :destroy
   belongs_to :user
 
+  validates :body, :presence => true
+
   def post
     commentable.is_a?(Post) ? commentable : commentable.post
   end

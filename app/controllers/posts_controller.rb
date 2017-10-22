@@ -18,7 +18,13 @@ class PostsController < ApplicationController
 
   def create
     @post = current_user.posts.create(post_params)
-    @post.save ? redirect_to(posts_path) : redirect_to(new)
+    if @post.save
+      redirect_to(posts_path)
+      flash[:success] = 'Post was created successfully.'
+    else
+      redirect_to(new_post_path)
+      flash[:error] = 'Title and Body fields are mandatory.'
+    end
   end
 
   def edit
@@ -27,7 +33,13 @@ class PostsController < ApplicationController
 
   def update
     if user_owner_of?(@post)
-      @post.update_attributes(post_params) ? redirect_to(@post) : redirect_to(new)
+      if @post.update_attributes(post_params) && @post.save
+        redirect_to(@post)
+        flash[:success] = 'Post was updated successfully.'
+      else
+        redirect_to(edit_post_path(@post))
+        flash[:error] = 'Title and Body fields are mandatory.'
+      end
     end
   end
 

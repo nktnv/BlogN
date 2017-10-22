@@ -15,3 +15,15 @@
 //= require_tree .
 //= require bootstrap
 //= require jquery
+
+$(document).ready(function(){
+    setTimeout(function(){
+        $('div.alert').fadeOut();
+    }, 10000);
+});
+
+$(document).ready(function(){
+    $('button.close').click(function(){
+        $('div.alert').fadeOut(1000);
+    });
+});
