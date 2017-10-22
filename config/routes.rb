@@ -7,6 +7,9 @@ Rails.application.routes.draw do
     resources :comments, except: [:show, :index]
   end
 
+  get 'myposts' => 'posts#index_users_posts'
+  get 'mostpopular' => 'posts#popular_posts'
+
   get 'signup' => 'users#new'
   resources :users
   resources :images
