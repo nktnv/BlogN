@@ -1,7 +1,13 @@
-<% @posts.each do |post| %>
-  <div class="post">
-    <span><%= post.created_at.strftime('%B %d, %Y, %l:%M%P') %></span>
-    <h4><%= link_to post.title, post %></h4>
-    <div><%= post.summary %></div>
+<% if @posts.blank? %>
+  <div class="well text-center">
+    <%= link_to 'There are no posts. Create the first one.', current_user ? new_post_path : signup_path %>
   </div>
+<% else %>
+  <% @posts.each do |post| %>
+    <div class="post">
+      <span><%= post.created_at.strftime('%B %d, %Y, %l:%M%P') %></span>
+      <h4><%= link_to post.title, post %></h4>
+      <div><%= post.summary %></div>
+    </div>
+  <% end %>
 <% end %>
