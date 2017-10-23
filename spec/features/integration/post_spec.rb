@@ -5,8 +5,11 @@ describe 'Post' do
 
   before(:all) do
     @email = Faker::Internet.email
+    @email2 = Faker::Internet.email
     @password = Faker::Internet.password
+    @password2 = Faker::Internet.password
     @user = create(:user, email: @email, password_digest: encrypted_password(@password))
+    @user = create(:user, email: @email2, password_digest: encrypted_password(@password2))
   end
 
   before(:each) do
@@ -53,6 +56,29 @@ describe 'Post' do
     logout
     open_posts_details(sentence)
     expect(page).not_to have_css(delete_post_link)
+  end
+
+  scenario 'create link should be displayed on "My posts" page' do
+    logout
+    login(@email2, @password2)
+    click_link 'My posts'
+    expect(page).to have_xpath(create_first_one_link)
+  end
+
+  scenario 'of another user should not be displayed on "My posts" page' do
+    create_post(sentence, sentence, paragraph)
+    logout
+    login(@email2, @password2)
+    expect(page).to have_content(sentence)
+    click_link 'My posts'
+    expect(page).not_to have_content(sentence)
+  end
+
+  scenario 'should be displayed on "My posts" page' do
+    click_link 'My posts'
+    create_post(sentence, sentence, paragraph)
+    click_link 'My posts'
+    expect(page).to have_content(sentence)
   end
 
 end

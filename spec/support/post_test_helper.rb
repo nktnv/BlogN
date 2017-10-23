@@ -26,6 +26,10 @@ module PostTestHelper
     'a[data-method="delete"][href*="/posts/"]'
   end
 
+  def create_first_one_link
+    '//a[text()="There are no posts. Create the first one."]'
+  end
+
   def post_id_by_body(body)
     Post.where(body: body).first.id
   end
