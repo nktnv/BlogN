@@ -2,7 +2,7 @@
   <h3>My profile</h3>
   <div class="well">
     <% if @user.image %>
-      <%= image_tag(public_images_path(@user.image), class: 'img-responsive') %>
+      <%= cl_image_tag(@user.image.picture, class: 'img-responsive') %>
       <%= link_to 'Upload new image', @user.image, method: :delete, class: 'btn btn-default', data: {confirm: 'Current image will be deleted. Are you sure?'} %>
     <% else %>
       <%= render '/images/image_form' %>

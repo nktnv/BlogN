@@ -1,7 +1,7 @@
 <% collection.each do |comment| %>
   <% break if comment.body.nil? && current_user %>
   <div id="comment_<%= comment.id %>" class="well">
-    <%= image_tag(public_images_path(comment.user.image), class: 'img-thumbnail comment-image') %>
+    <%= image_tag(comment.user.image.nil? ? no_avatar_image : comment.user.image.picture, class: 'img-thumbnail comment-image') %>
     <span>
       <strong>
         <%= current_user && current_user.id == comment.user.id ? 'Me:' : "#{comment.user.first_name} #{comment.user.last_name}" %>
