@@ -11,7 +11,8 @@ gem 'twitter-bootstrap-rails'
 gem 'simple_form'
 gem 'bcrypt', '~> 3.1', '>= 3.1.11'
 gem 'jquery-rails'
-
+gem 'cloudinary'
+gem 'figaro'
 gem 'pg', '~> 0.21.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

@@ -9,8 +9,24 @@ module ImagesHelper
     Rails.root.join('public', 'images', file_name)
   end
 
-  def public_images_path(image)
-    image.nil? ? '/images/no_avatar.png' : "/images/#{image.picture}"
+  def create_image(file_name, uploaded_file)
+    File.open(file_name, 'wb') do |f|
+      f.write(uploaded_file)
+    end
+    file_name
+  end
+
+  def upload_file_to_cloudinary(file)
+    response = Cloudinary::Uploader.upload(file)
+    response['url']
+  end
+
+  def clean_public_image_directory
+    FileUtils.rm_rf(Dir.glob('public/images/*'))
+  end
+
+  def no_avatar_image
+    '/no_avatar.png'
   end
 
 end
