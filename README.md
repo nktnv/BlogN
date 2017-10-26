@@ -6,9 +6,16 @@ Preparing:
 - bundle isntall
 - rake db:migrate
 
-Starting:
-- DB - sudo service postgresql start
-- Server - rails s
+Define next environment variables for the https://cloudinary.com resource:
+- cloudinary_cloud_name
+- cloudinary_api_key
+- cloudinary_api_secret
+
+Start database:
+- sudo service postgresql start
+
+Start server:
+- rails s
 
 Tests running:
 - bundle exec rspec
