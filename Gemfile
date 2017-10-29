@@ -12,7 +12,6 @@ gem 'simple_form'
 gem 'bcrypt', '~> 3.1', '>= 3.1.11'
 gem 'jquery-rails'
 gem 'cloudinary'
-gem 'figaro'
 gem 'pg', '~> 0.21.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -55,6 +54,7 @@ group :development, :test do
   gem 'email_spec'
   gem 'database_cleaner', '~> 1.5', '>= 1.5.3'
   gem 'sqlite3'
+  gem 'figaro'
 end
 
 group :development do

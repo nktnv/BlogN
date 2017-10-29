@@ -16,9 +16,14 @@ module ImagesHelper
     file_name
   end
 
-  def upload_file_to_cloudinary(file)
-    response = Cloudinary::Uploader.upload(file)
+  def upload_file_to_cloudinary(file, public_id)
+    response = Cloudinary::Uploader.upload(file, folder: Rails.env, public_id: public_id)
     response['url']
+  end
+
+  def delete_file_on_cloudinary(url)
+    public_id = url.split('/').last.split('.').first
+    Cloudinary::Uploader.destroy("#{Rails.env}/#{public_id}")
   end
 
   def clean_public_image_directory
@@ -27,6 +32,10 @@ module ImagesHelper
 
   def no_avatar_image
     '/no_avatar.png'
+  end
+
+  def image_content_type?(uploaded_obj)
+    uploaded_obj.content_type.include?('image')
   end
 
 end
