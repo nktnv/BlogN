@@ -4,7 +4,7 @@
   <time><%= @post.created_at.strftime('%B %d, %Y, %l:%M%P') %></time>
   <h3><%= @post.title %></h3>
   <div class="post-body"><%= @post.body %></div>
-  <div class="form-inline init-comment">
+  <div class="form-inline init-comment-panel">
     <% if user_owner_of?(@post) %>
       <%= link_to 'Edit', edit_post_path(@post), class: 'btn btn-default' %>
       <%= link_to 'Delete', @post, remote: true, method: :delete, class: 'btn btn-default', data: {confirm: 'Are you sure?'} %>
@@ -12,6 +12,8 @@
     <%= render 'votes/votes', parent: @post, vote_type: 'like' %>
     <%= render 'votes/votes', parent: @post, vote_type: 'dislike' %>
   </div>
+</div>
+<div id="comments">
   <% if current_user %>
     <%= render 'comments/form', parent: @post %>
   <% else %>
