@@ -1,14 +1,11 @@
 <div class="votes">
-  <%= simple_form_for([parent, parent.votes.build]) do |f| %>
-    <span class=<%= vote_type %>><%= all_votes(parent, vote_type) %></span>
-    <% if current_user && user_voted?(parent, vote_type) %>
-      <%= link_to vote_type, [parent, parent.votes.first], method: :delete, class: "btn btn-default #{vote_type}" %>
-    <% elsif current_user && user_voted?(parent, vote_type == 'like' ? 'dislike' : 'like') %>
-      <%= link_to vote_type, [parent, user_vote(parent)], method: :put, class: "btn btn-default #{vote_type}" %>
-    <% elsif current_user %>
-      <%= f.hidden_field :user_id, value: current_user.id %>
-      <%= f.hidden_field :attitude, value: vote_type %>
-      <%= f.button :submit, value: vote_type, class: vote_type %>
-    <% end %>
+  <% parent_name = parent.class.name.downcase %>
+  <span class=<%= vote_type %>><%= all_votes(parent, vote_type) %></span>
+  <% if current_user && user_voted?(parent, vote_type) %>
+    <%= link_to vote_type, [parent, parent.votes.first], method: :delete, remote: true, class: "btn btn-default #{vote_type}" %>
+  <% elsif current_user && user_voted?(parent, vote_type == 'like' ? 'dislike' : 'like') %>
+    <%= link_to vote_type, [parent, user_vote(parent)], method: :put, remote: true, class: "btn btn-default #{vote_type}" %>
+  <% elsif current_user %>
+    <%= link_to vote_type, eval("#{parent_name}_votes_path(#{parent_name}_id: parent.id, vote: {user_id: current_user.id, attitude: vote_type})"), method: :post, remote: true, class: "btn btn-default #{vote_type}" %>
   <% end %>
 </div>

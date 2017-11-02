@@ -51,4 +51,22 @@ describe 'Vote' do
     expect(posts_votes('dislike')).to eq(init_votes_number)
   end
 
+  scenario 'as "like" should be changed on "dislike"' do
+    open_posts_details(@title)
+    vote_the_post('like')
+    init_votes_number = posts_votes('dislike')
+    vote_the_post('dislike')
+    expect(posts_votes('like')).to eq 0
+    expect(posts_votes('dislike')).to eq(init_votes_number + 1)
+  end
+
+  scenario 'as "dislike" should be changed on "like"' do
+    open_posts_details(@title)
+    vote_the_post('dislike')
+    init_votes_number = posts_votes('like')
+    vote_the_post('like')
+    expect(posts_votes('dislike')).to eq 0
+    expect(posts_votes('like')).to eq(init_votes_number + 1)
+  end
+
 end

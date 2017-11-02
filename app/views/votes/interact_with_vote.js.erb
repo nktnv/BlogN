@@ -1,0 +1,29 @@
+<% opposite_attitude = @vote.attitude == 'like' ? 'dislike' : 'like' %>
+var parent_id = '<%= @parent.is_a?(Post) ? 'current_post' : "comment_#{@parent.id}" %>',
+    object_locator = `#${parent_id}>div[class*="panel"] `,
+    counter_locator = object_locator + 'span.<%= @vote.attitude %>',
+    current_count = parseInt($(counter_locator).text());
+
+switch ('<%= action_name %>') {
+  case 'create':
+    $(counter_locator).text(current_count + 1);
+    $(object_locator + 'a.<%= @vote.attitude %>').replaceWith('<%= escape_javascript link_to @vote.attitude, [@parent, @parent.votes.first], method: :delete, remote: true, class: "btn btn-default #{@vote.attitude}" %>');
+    $(object_locator + 'a.<%= opposite_attitude %>').replaceWith('<%= escape_javascript link_to opposite_attitude, [@parent, user_vote(@parent)], method: :put, remote: true, class: "btn btn-default #{opposite_attitude}" %>');
+    break;
+  case 'update':
+    var opposite_counter_locator = object_locator + `span.<%= opposite_attitude %>`,
+        opposite_count = parseInt($(opposite_counter_locator).text());
+    $(opposite_counter_locator).text(opposite_count - 1);
+    $(counter_locator).text(current_count + 1);
+    $(object_locator + 'a.<%= @vote.attitude %>').replaceWith('<%= escape_javascript link_to @vote.attitude, [@parent, @parent.votes.first], method: :delete, remote: true, class: "btn btn-default #{@vote.attitude}" %>');
+    $(object_locator + 'a.<%= opposite_attitude %>').replaceWith('<%= escape_javascript link_to opposite_attitude, [@parent, user_vote(@parent)], method: :put, remote: true, class: "btn btn-default #{opposite_attitude}" %>');
+    break;
+  case 'destroy':
+    <% parent_name = @parent.class.name.downcase %>
+    $(counter_locator).text(current_count - 1);
+    $(object_locator + 'a.<%= @vote.attitude %>').replaceWith('<%= link_to @vote.attitude, eval("#{parent_name}_votes_path(#{parent_name}_id: @parent.id, vote: {user_id: current_user.id, attitude: @vote.attitude})"), method: :post, remote: true, class: "btn btn-default #{@vote.attitude}" %>');
+    $(object_locator + 'a.<%= opposite_attitude %>').replaceWith('<%= link_to opposite_attitude, eval("#{parent_name}_votes_path(#{parent_name}_id: @parent.id, vote: {user_id: current_user.id, attitude: opposite_attitude})"), method: :post, remote: true, class: "btn btn-default #{opposite_attitude}" %>');
+    break
+  default:
+    throw `Unexpected action: ${'<%= action_name %>'}`;
+}
